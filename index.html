@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
@@ -7,75 +7,106 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand"><span>Ami</span>Wheels</div>
-    <a class="icon-btn" href="#jual">+</a>
-  </header>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">Ami<span>Wheels</span></div>
+      <button class="icon-btn" aria-label="Notifikasi">🔔</button>
+    </header>
 
-  <main>
-    <section class="search-box">
-      <input id="searchInput" type="text" placeholder="Cari Hot Wheels, display, blister..." />
-    </section>
+    <main>
+      <section id="beranda" class="page active">
+        <div class="search-wrap">
+          <input id="searchInput" type="search" placeholder="Cari Hot Wheels, display, dll..." />
+          <span>🔍</span>
+        </div>
 
-    <section class="hero">
-      <div>
-        <p class="eyebrow">Marketplace kolektor</p>
-        <h1>Jual • Beli • Tukar Koleksi</h1>
-        <p>Hot Wheels, display case, blister protector, dan aksesoris.</p>
-        <a href="#produk" class="btn">Lihat Produk</a>
-      </div>
-    </section>
+        <section class="hero-card">
+          <div>
+            <p class="eyebrow">HOT WHEELS MARKETPLACE</p>
+            <h1>Jual • Beli • Tukar<br/>Koleksi Terbaikmu</h1>
+            <button onclick="scrollToProducts()">Jelajahi Sekarang</button>
+          </div>
+          <div class="hero-car">🏎️</div>
+        </section>
 
-    <section class="section">
-      <div class="section-head">
-        <h2>Kategori</h2>
-      </div>
-      <div class="categories" id="categoryButtons">
-        <button data-category="Semua" class="active">Semua</button>
-        <button data-category="Loose">Loose</button>
-        <button data-category="Blister">Blister</button>
-        <button data-category="Display">Display</button>
-        <button data-category="Protector">Protector</button>
-        <button data-category="Premium">Premium</button>
-      </div>
-    </section>
+        <div class="section-title">
+          <h2>Kategori</h2>
+          <button onclick="showPage('kategori')">Lihat Semua ›</button>
+        </div>
+        <div class="category-grid compact" id="homeCategories"></div>
 
-    <section class="section" id="produk">
-      <div class="section-head">
-        <h2>Produk Terbaru</h2>
-        <span id="resultCount"></span>
-      </div>
-      <div class="product-grid" id="productGrid"></div>
-    </section>
+        <div class="section-title" id="produk">
+          <h2>Produk Terbaru</h2>
+          <button onclick="showPage('kategori')">Lihat Semua ›</button>
+        </div>
+        <div class="product-grid" id="productGrid"></div>
+      </section>
 
-    <section class="section sell-card" id="jual">
-      <h2>Jual Produk</h2>
-      <p>Untuk versi ringan, listing masuk lewat WhatsApp admin dulu.</p>
-      <form id="sellForm">
-        <input name="nama" placeholder="Nama produk" required />
-        <input name="harga" placeholder="Harga" required />
-        <select name="kategori" required>
-          <option value="">Pilih kategori</option>
-          <option>Loose</option>
-          <option>Blister</option>
-          <option>Display</option>
-          <option>Protector</option>
-          <option>Premium</option>
-        </select>
-        <input name="lokasi" placeholder="Lokasi" required />
-        <textarea name="deskripsi" placeholder="Deskripsi singkat"></textarea>
-        <button class="btn full" type="submit">Kirim ke WhatsApp Admin</button>
-      </form>
-    </section>
-  </main>
+      <section id="detail" class="page">
+        <button class="back-btn" onclick="showPage('beranda')">‹ Kembali</button>
+        <div id="detailContent"></div>
+      </section>
 
-  <nav class="bottom-nav">
-    <a href="#" class="active">Beranda</a>
-    <a href="#categoryButtons">Kategori</a>
-    <a href="#jual" class="plus">Jual</a>
-    <a href="#produk">Produk</a>
-  </nav>
+      <section id="jual" class="page">
+        <h2 class="page-title">Jual Produk</h2>
+        <form class="sell-form" onsubmit="sendListing(event)">
+          <label>Foto Produk</label>
+          <div class="upload-box">📷<br/>Tambah Foto</div>
+          <label>Nama Produk</label>
+          <input id="sellName" required placeholder="Contoh: Nissan Skyline GT-R R34" />
+          <label>Harga</label>
+          <input id="sellPrice" required type="number" placeholder="Contoh: 75000" />
+          <label>Kategori</label>
+          <select id="sellCategory" required>
+            <option value="">Pilih Kategori</option>
+            <option>Loose</option><option>Blister</option><option>Display</option><option>Protector</option><option>Premium</option><option>TH</option><option>STH</option><option>Aksesoris</option>
+          </select>
+          <label>Kondisi</label>
+          <select id="sellCondition" required>
+            <option value="">Pilih Kondisi</option>
+            <option>Mint</option><option>Near Mint</option><option>Good</option><option>Loose</option><option>Blister Rusak</option><option>Baru</option>
+          </select>
+          <label>Lokasi</label>
+          <input id="sellLocation" placeholder="Contoh: Jakarta Timur" />
+          <label>Deskripsi</label>
+          <textarea id="sellDesc" placeholder="Tulis deskripsi produk..."></textarea>
+          <label>Nomor WhatsApp</label>
+          <input id="sellWa" placeholder="Contoh: 62812xxxxxxx" />
+          <button class="primary-btn" type="submit">Posting Produk</button>
+        </form>
+      </section>
 
+      <section id="kategori" class="page">
+        <h2 class="page-title">Kategori</h2>
+        <div class="category-list" id="categoryList"></div>
+      </section>
+
+      <section id="favorit" class="page">
+        <h2 class="page-title">Favorit</h2>
+        <div class="product-grid" id="favoriteGrid"></div>
+      </section>
+
+      <section id="akun" class="page">
+        <h2 class="page-title">Akun</h2>
+        <div class="profile-card">
+          <div class="avatar">AW</div>
+          <div><h3>AmiWheels Garage</h3><p>⭐ 4.9 (120 Ulasan)</p></div>
+        </div>
+        <div class="stats"><div><b>120</b><span>Produk Dijual</span></div><div><b>85</b><span>Transaksi</span></div><div><b>98%</b><span>Rating Positif</span></div></div>
+        <div class="menu-list">
+          <button>🛍️ Produk Saya ›</button><button>📦 Transaksi ›</button><button>📋 Pesanan ›</button><button>♡ Favorit ›</button><button>⚙️ Pengaturan Akun ›</button><button>❔ Bantuan & Panduan ›</button><button>ℹ️ Tentang AmiWheels ›</button><button class="logout">↪ Keluar</button>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-item active" onclick="showPage('beranda', this)">⌂<span>Beranda</span></button>
+      <button class="nav-item" onclick="showPage('kategori', this)">▦<span>Kategori</span></button>
+      <button class="nav-add" onclick="showPage('jual')">＋<span>Jual</span></button>
+      <button class="nav-item" onclick="showPage('favorit', this)">♡<span>Favorit</span></button>
+      <button class="nav-item" onclick="showPage('akun', this)">♙<span>Akun</span></button>
+    </nav>
+  </div>
   <script src="app.js"></script>
 </body>
 </html>
