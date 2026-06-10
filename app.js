@@ -51,7 +51,7 @@ document.querySelectorAll(".menu-item").forEach((item) => {
     } else if (text.includes("favorit")) {
       document.querySelector("#favorit")?.scrollIntoView({ behavior: "smooth" });
     } else if (text.includes("bantuan")) {
-      window.open("https://wa.me/6281234567890?text=Halo%20AmiWheels,%20saya%20butuh%20bantuan", "_blank");
+      window.open("https://wa.me/6289528201187?text=Halo%20AmiWheels,%20saya%20butuh%20bantuan", "_blank");
     } else if (text.includes("tentang")) {
       alert("AmiWheels adalah marketplace ringan untuk jual beli Hot Wheels, display, dan blister protector.");
     } else if (text.includes("keluar")) {
@@ -85,7 +85,7 @@ document.addEventListener("click", function (e) {
   }
 
   if (text.includes("bantuan")) {
-    window.open("https://wa.me/6281234567890?text=Halo%20AmiWheels,%20saya%20butuh%20bantuan", "_blank");
+    window.open("https://wa.me/6289528201187?text=Halo%20AmiWheels,%20saya%20butuh%20bantuan", "_blank");
   }
 
   if (text.includes("tentang amiwheels")) {
