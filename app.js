@@ -61,3 +61,38 @@ document.querySelectorAll(".menu-item").forEach((item) => {
     }
   });
 });
+document.addEventListener("click", function (e) {
+  const text = e.target.innerText?.toLowerCase() || "";
+
+  if (text.includes("produk saya")) {
+    alert("Produk Saya akan tersedia di versi berikutnya.");
+  }
+
+  if (text.includes("transaksi")) {
+    alert("Fitur Transaksi segera hadir.");
+  }
+
+  if (text.includes("pesanan")) {
+    alert("Fitur Pesanan segera hadir.");
+  }
+
+  if (text.includes("favorit")) {
+    showPage("favorit");
+  }
+
+  if (text.includes("pengaturan akun")) {
+    alert("Pengaturan Akun segera hadir.");
+  }
+
+  if (text.includes("bantuan")) {
+    window.open("https://wa.me/6281234567890?text=Halo%20AmiWheels,%20saya%20butuh%20bantuan", "_blank");
+  }
+
+  if (text.includes("tentang amiwheels")) {
+    alert("AmiWheels adalah marketplace ringan untuk jual beli Hot Wheels, display, dan blister protector.");
+  }
+
+  if (text.includes("keluar")) {
+    alert("Fitur login belum tersedia di versi ringan.");
+  }
+});
