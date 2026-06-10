@@ -42,3 +42,22 @@ function scrollToProducts(){document.getElementById('produk').scrollIntoView({be
 function sendListing(e){e.preventDefault();const text=`Halo Admin AmiWheels, saya mau jual produk:%0A%0ANama: ${sellName.value}%0AHarga: ${sellPrice.value}%0AKategori: ${sellCategory.value}%0AKondisi: ${sellCondition.value}%0ALokasi: ${sellLocation.value}%0ADeskripsi: ${sellDesc.value}%0AWA Penjual: ${sellWa.value}`;location.href=`https://wa.me/${adminWa}?text=${text}`}
 document.getElementById('searchInput').addEventListener('input',e=>{const q=e.target.value.toLowerCase();renderProducts(products.filter(p=>`${p.name} ${p.category} ${p.condition} ${p.location}`.toLowerCase().includes(q)))});
 renderCategories();renderProducts();renderFavorites();
+document.querySelectorAll(".menu-item").forEach((item) => {
+  item.addEventListener("click", () => {
+    const text = item.innerText.toLowerCase();
+
+    if (text.includes("produk saya")) {
+      document.querySelector("#jual")?.scrollIntoView({ behavior: "smooth" });
+    } else if (text.includes("favorit")) {
+      document.querySelector("#favorit")?.scrollIntoView({ behavior: "smooth" });
+    } else if (text.includes("bantuan")) {
+      window.open("https://wa.me/6281234567890?text=Halo%20AmiWheels,%20saya%20butuh%20bantuan", "_blank");
+    } else if (text.includes("tentang")) {
+      alert("AmiWheels adalah marketplace ringan untuk jual beli Hot Wheels, display, dan blister protector.");
+    } else if (text.includes("keluar")) {
+      alert("Fitur login belum tersedia di versi ringan.");
+    } else {
+      alert("Fitur ini segera hadir di AmiWheels.");
+    }
+  });
+});
