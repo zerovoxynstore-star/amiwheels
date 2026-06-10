@@ -1,28 +1,117 @@
-<!doctype html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AmiWheels</title><link rel="stylesheet" href="style.css"></head><body>
-<div class="app">
-<header><div class="logo">Ami<span>Wheels</span></div><button class="bell">🔔</button></header>
-<main>
-<section id="home" class="page active">
- <div class="hero"><div><b>GARAGE KOLEKTOR INDONESIA</b><h1>Jual • Beli • Tukar Koleksi Rare</h1><p>Temukan Hot Wheels pilihan, premium, TH, STH, display case, dan blister protector dari kolektor terpercaya.</p><button onclick="showPage('jual')">Jual Sekarang</button></div></div>
- <div class="stats"><div><strong>120+</strong><span>Produk Aktif</span></div><div><strong>85</strong><span>Total Transaksi</span></div><div><strong>4.9</strong><span>Rating Toko</span></div></div>
- <h2>Produk Terbaru</h2><div id="products" class="grid"></div>
-</section>
-<section id="jual" class="page">
- <h1>Jual Produk</h1><p class="lead">Masukkan detail koleksi Hot Wheels kamu. Listing akan dikirim ke admin AmiWheels melalui WhatsApp untuk dicek sebelum dipublikasikan.</p>
- <form id="sellForm" class="cardform">
-  <label>Foto Produk</label><div class="uploadBox"><input id="fotoProduk" type="file" accept="image/*"><div id="preview" class="preview"><span>📷 Tambah Foto Hot Wheels</span></div></div>
-  <label>Nama Produk</label><input id="nama" placeholder="Contoh: Nissan Skyline GT-R R34 Factory Fresh">
-  <label>Harga</label><input id="harga" placeholder="Contoh: 75000" inputmode="numeric">
-  <label>Kategori</label><select id="kategori"><option>Blister</option><option>Loose</option><option>Premium</option><option>Treasure Hunt</option><option>Super Treasure Hunt</option><option>Display Case</option><option>Blister Protector</option></select>
-  <label>Kondisi</label><select id="kondisi"><option>Mint</option><option>Near Mint</option><option>Good</option><option>Loose</option><option>Blister Rusak</option></select>
-  <label>Lokasi</label><input id="lokasi" placeholder="Contoh: Jakarta Timur">
-  <label>Nomor WhatsApp</label><input id="wa" placeholder="62812xxxxxxxx">
-  <label>Deskripsi Produk</label><textarea id="desk" placeholder="Contoh: Koleksi pribadi, blister bening, card mulus, cocok untuk display atau kolektor. Barang sesuai foto dan siap dikirim dengan packing aman."></textarea>
-  <button class="primary">Kirim ke WhatsApp Admin</button>
- </form>
-</section>
-<section id="review" class="page"><h1>Review & Bukti Transaksi</h1><div class="review"><b>Raka - Jakarta</b><p>Barang aman, blister rapi, packing tebal.</p><strong>✅ Transaksi AMI-24001</strong></div></section>
-<section id="akun" class="page"><h1>Akun Penjual</h1><div class="seller"><div class="avatar">AW</div><div><h2>AmiWheels Garage</h2><p>⭐ 4.9 (120 Ulasan)</p></div></div><div class="menu"><button>Total Transaksi: 85</button><button>Ubah Password</button><button>Cek Transaksi Pembeli</button><button>Bantuan Admin</button></div></section>
-</main>
-<nav><button onclick="showPage('home')">⌂<span>Beranda</span></button><button onclick="showPage('home')">▦<span>Kategori</span></button><button class="plus" onclick="showPage('jual')">+<span>Jual</span></button><button onclick="showPage('review')">▤<span>Review</span></button><button onclick="showPage('akun')">♟<span>Akun</span></button></nav>
-</div><script src="app.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AmiWheels - Garage Collector Zone</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-noise"></div>
+  <main class="app-shell">
+    <section class="link-strip">
+      <h1>DUA LINK — 1 UNTUK PEMBELI, 1 UNTUK PENJUAL</h1>
+      <div class="link-grid">
+        <button onclick="goBuyer()"><span>LINK PEMBELI</span><b id="buyerLink">/amiwheels/#pembeli</b></button>
+        <button onclick="goSeller()"><span>LINK PENJUAL</span><b id="sellerLink">/amiwheels/#penjual</b></button>
+      </div>
+    </section>
+
+    <section id="buyerPage" class="page buyer-layout">
+      <header class="topbar glass">
+        <div class="logo">Ami<span>Wheels</span></div>
+        <nav><button>Beranda</button><button>Kategori</button><button onclick="scrollToId('review')">Review</button><button>Tentang Kami</button></nav>
+        <div class="top-icons"><button>⌕</button><button>🛒<em>1</em></button></div>
+      </header>
+
+      <section class="hero garage-card">
+        <div class="hero-content">
+          <p class="eyebrow">GARAGE KOLEKTOR INDONESIA</p>
+          <h2>Jual • Beli • Tukar<br/>Koleksi Hot Wheels Rare</h2>
+          <p>Temukan koleksi langka, premium, TH, STH, display case, dan blister protector terbaik.</p>
+          <button onclick="scrollToId('products')">Jelajahi Koleksi →</button>
+        </div>
+        <div class="neon-sign">HOT WHEELS<br/><small>GARAGE ZONE</small></div>
+      </section>
+
+      <section class="stats glass">
+        <div><strong>120+</strong><span>Produk Aktif</span></div>
+        <div><strong>85</strong><span>Transaksi Sukses</span></div>
+        <div><strong>4.9</strong><span>Rating Toko</span></div>
+        <div><strong>100%</strong><span>Aman & Terpercaya</span></div>
+      </section>
+
+      <div class="section-head"><h3>Kategori</h3><a>Lihat Semua ›</a></div>
+      <section id="categories" class="cat-row"></section>
+
+      <div class="section-head"><h3>Produk Terbaru</h3><a>Lihat Semua ›</a></div>
+      <section id="products" class="product-grid"></section>
+
+      <div class="section-head"><h3>Review & Bukti Transaksi</h3><a>Lihat Semua ›</a></div>
+      <section id="review" class="review-card glass">
+        <div class="avatar">R</div><div><h4>Raka - Jakarta <span>★★★★★</span></h4><p>Barang aman, blister rapi, packing tebal.</p><b>✅ Transaksi AMI-24001</b></div><div class="receipt">Bukti<br/>Transfer</div>
+      </section>
+
+      <section class="benefit-row">
+        <div>🛡️<b>Produk Original</b><span>100% koleksi original</span></div>
+        <div>📦<b>Packing Tebal</b><span>Aman sampai tujuan</span></div>
+        <div>📞<b>Respon Cepat</b><span>Admin ramah</span></div>
+        <div>⭐<b>Trusted Seller</b><span>Dipercaya kolektor</span></div>
+      </section>
+    </section>
+
+    <aside id="sellerPage" class="seller-column page">
+      <section id="loginPanel" class="login-panel garage-card">
+        <div class="logo center">Ami<span>Wheels</span></div>
+        <h2>LOGIN PENJUAL</h2>
+        <p>Masuk untuk mengelola toko dan produk Anda</p>
+        <label>Username</label><input id="username" value="Amiwheels" />
+        <label>Password</label><input id="password" type="password" value="Amijelek123" />
+        <div class="login-row"><label><input type="checkbox" checked/> Ingat saya</label><a>Lupa Password?</a></div>
+        <button class="primary" onclick="loginSeller()">Masuk</button>
+        <button class="outline" onclick="showCheckTransaction()">📋 Cek Transaksi (Pembeli)</button>
+      </section>
+
+      <section id="dashboardPanel" class="dashboard glass hidden">
+        <header class="mini-top"><div class="logo small">Ami<span>Wheels</span></div><button onclick="logout()">↗</button></header>
+        <h2>Dashboard Penjual</h2><p>Halo, Amiwheels 👋</p>
+        <div class="dash-grid"><div><b>120+</b><span>Produk Aktif</span></div><div><b id="txCount">85</b><span>Total Transaksi</span></div><div><b>12</b><span>Bulan Ini</span></div><div><b>Rp 7.250.000</b><span>Total Penjualan</span></div></div>
+        <div class="quick-grid"><button onclick="showSellForm()">＋<span>Tambah Produk</span></button><button>📦<span>Kelola Produk</span></button><button onclick="showCheckTransaction()">📄<span>Transaksi</span></button><button onclick="showPasswordForm()">🔒<span>Ubah Password</span></button></div>
+        <h3>Transaksi Terbaru</h3><div id="transactionList" class="transaction-list"></div>
+      </section>
+
+      <section id="sellPanel" class="sell-panel glass hidden">
+        <header class="mini-top"><button onclick="backDashboard()">←</button><div class="logo small">Ami<span>Wheels</span></div></header>
+        <h2>Jual Produk</h2><p>Lengkapi detail produk dengan benar.</p>
+        <div class="form-grid">
+          <label class="upload-box"><input id="photoInput" type="file" accept="image/*" onchange="previewPhoto(event)"/><div id="photoPreview">📷<br/>Klik upload foto<br/><small>PNG/JPG max 5MB</small></div></label>
+          <div class="form-fields">
+            <label>Nama Produk</label><input id="pName" placeholder="Contoh: Nissan Skyline GT-R R34" />
+            <label>Harga</label><input id="pPrice" placeholder="Contoh: 75000" />
+            <div class="two"><div><label>Kategori</label><select id="pCat"><option>Blister</option><option>Loose</option><option>Premium</option><option>TH</option><option>STH</option></select></div><div><label>Kondisi</label><select id="pCond"><option>Mint</option><option>Good</option><option>Baru</option></select></div></div>
+            <div class="two"><div><label>Lokasi</label><input id="pLoc" placeholder="Jakarta Timur" /></div><div><label>Nomor WhatsApp</label><input id="pWa" placeholder="62812xxxxxxx" /></div></div>
+            <label>Deskripsi Produk</label><textarea id="pDesc" placeholder="Tulis detail produk, kondisi blister, kelengkapan, dan info packing."></textarea>
+          </div>
+        </div>
+        <button class="primary full" onclick="addProduct()">💬 Kirim ke WhatsApp Admin</button>
+      </section>
+
+      <section id="checkPanel" class="check-panel glass hidden">
+        <header class="mini-top"><button onclick="backDashboard()">←</button><h3>Cek Transaksi (Pembeli)</h3></header>
+        <label>Masukkan kode transaksi / invoice</label><input id="invoiceCode" placeholder="Contoh: AMI-24001" />
+        <button class="primary full" onclick="checkInvoice()">Cek Transaksi</button>
+        <div id="invoiceResult" class="invoice-result"></div>
+      </section>
+
+      <section id="passwordPanel" class="check-panel glass hidden">
+        <header class="mini-top"><button onclick="backDashboard()">←</button><h3>Ubah Password</h3></header>
+        <label>Password Lama</label><input type="password" placeholder="••••••••" />
+        <label>Password Baru</label><input id="newPass" type="password" placeholder="Password baru" />
+        <label>Konfirmasi Password Baru</label><input id="confirmPass" type="password" placeholder="Ulangi password" />
+        <button class="primary full" onclick="changePassword()">Simpan Perubahan</button>
+      </section>
+    </aside>
+  </main>
+<script src="app.js"></script>
+</body>
+</html>
