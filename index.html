@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AmiWheels - Jual Beli Hot Wheels</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span>Ami</span>Wheels</div>
+    <a class="icon-btn" href="#jual">+</a>
+  </header>
+
+  <main>
+    <section class="search-box">
+      <input id="searchInput" type="text" placeholder="Cari Hot Wheels, display, blister..." />
+    </section>
+
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Marketplace kolektor</p>
+        <h1>Jual • Beli • Tukar Koleksi</h1>
+        <p>Hot Wheels, display case, blister protector, dan aksesoris.</p>
+        <a href="#produk" class="btn">Lihat Produk</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Kategori</h2>
+      </div>
+      <div class="categories" id="categoryButtons">
+        <button data-category="Semua" class="active">Semua</button>
+        <button data-category="Loose">Loose</button>
+        <button data-category="Blister">Blister</button>
+        <button data-category="Display">Display</button>
+        <button data-category="Protector">Protector</button>
+        <button data-category="Premium">Premium</button>
+      </div>
+    </section>
+
+    <section class="section" id="produk">
+      <div class="section-head">
+        <h2>Produk Terbaru</h2>
+        <span id="resultCount"></span>
+      </div>
+      <div class="product-grid" id="productGrid"></div>
+    </section>
+
+    <section class="section sell-card" id="jual">
+      <h2>Jual Produk</h2>
+      <p>Untuk versi ringan, listing masuk lewat WhatsApp admin dulu.</p>
+      <form id="sellForm">
+        <input name="nama" placeholder="Nama produk" required />
+        <input name="harga" placeholder="Harga" required />
+        <select name="kategori" required>
+          <option value="">Pilih kategori</option>
+          <option>Loose</option>
+          <option>Blister</option>
+          <option>Display</option>
+          <option>Protector</option>
+          <option>Premium</option>
+        </select>
+        <input name="lokasi" placeholder="Lokasi" required />
+        <textarea name="deskripsi" placeholder="Deskripsi singkat"></textarea>
+        <button class="btn full" type="submit">Kirim ke WhatsApp Admin</button>
+      </form>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="#" class="active">Beranda</a>
+    <a href="#categoryButtons">Kategori</a>
+    <a href="#jual" class="plus">Jual</a>
+    <a href="#produk">Produk</a>
+  </nav>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

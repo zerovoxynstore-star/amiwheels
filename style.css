@@ -1,0 +1,197 @@
+:root {
+  --yellow: #ffc400;
+  --black: #101010;
+  --white: #ffffff;
+  --soft: #f5f5f5;
+  --gray: #777;
+  --line: #e7e7e7;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--soft);
+  color: var(--black);
+  padding-bottom: 78px;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--white);
+  padding: 18px 18px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  font-size: 28px;
+  font-weight: 900;
+  font-style: italic;
+}
+.brand span { color: var(--black); }
+.brand { color: var(--yellow); }
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: var(--yellow);
+  color: var(--black);
+  border-radius: 50%;
+  text-decoration: none;
+  font-weight: 800;
+}
+
+main { max-width: 960px; margin: 0 auto; padding: 14px; }
+.search-box input,
+form input,
+form select,
+form textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+  font-size: 15px;
+  background: var(--white);
+}
+
+.hero {
+  margin-top: 14px;
+  background: linear-gradient(135deg, #121212, #303030);
+  color: var(--white);
+  border-radius: 22px;
+  padding: 26px;
+  min-height: 190px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.eyebrow { color: var(--yellow); font-weight: 700; margin: 0 0 8px; }
+.hero h1 { margin: 0; font-size: 30px; }
+.hero p { color: #ddd; }
+.btn {
+  display: inline-block;
+  background: var(--yellow);
+  color: var(--black);
+  padding: 12px 18px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+}
+.full { width: 100%; }
+
+.section { margin-top: 24px; }
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.section h2 { margin: 0 0 12px; }
+#resultCount { color: var(--gray); font-size: 13px; }
+.categories {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.categories button {
+  border: 1px solid var(--line);
+  background: var(--white);
+  border-radius: 14px;
+  padding: 14px 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.categories button.active { background: var(--yellow); border-color: var(--yellow); }
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.product-card {
+  background: var(--white);
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: 0 6px 18px rgba(0,0,0,.05);
+}
+.product-img {
+  height: 150px;
+  background: linear-gradient(135deg, #ddd, #aaa);
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  color: #333;
+  text-align: center;
+  padding: 12px;
+}
+.product-body { padding: 12px; }
+.product-body h3 { font-size: 15px; margin: 0 0 8px; }
+.price { color: #e0a800; font-weight: 900; margin: 0 0 8px; }
+.meta { color: var(--gray); font-size: 13px; line-height: 1.5; }
+.whatsapp {
+  margin-top: 12px;
+  display: block;
+  text-align: center;
+  background: #25d366;
+  color: white;
+  padding: 10px;
+  border-radius: 12px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.badge {
+  display: inline-block;
+  background: #e6f7e9;
+  color: #168038;
+  padding: 5px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+.sell-card {
+  background: var(--white);
+  padding: 18px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+}
+form { display: grid; gap: 12px; }
+textarea { min-height: 100px; resize: vertical; }
+
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--white);
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 8px 14px;
+  z-index: 10;
+}
+.bottom-nav a {
+  color: var(--black);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+.bottom-nav .active { color: #d49b00; }
+.bottom-nav .plus {
+  background: var(--yellow);
+  padding: 9px 14px;
+  border-radius: 999px;
+  margin-top: -8px;
+}
+
+@media (min-width: 720px) {
+  .product-grid { grid-template-columns: repeat(4, 1fr); }
+  .categories { grid-template-columns: repeat(6, 1fr); }
+  .bottom-nav { max-width: 960px; margin: 0 auto; border-radius: 22px 22px 0 0; }
+}
