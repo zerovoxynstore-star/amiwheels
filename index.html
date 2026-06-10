@@ -1,110 +1,165 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AmiWheels - Jual Beli Hot Wheels</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AmiWheels - Garage Marketplace</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="app-shell">
     <header class="topbar">
-      <div class="brand">Ami<span>Wheels</span></div>
-      <button class="icon-btn" aria-label="Notifikasi">🔔</button>
+      <div class="brand"><span>Ami</span>Wheels</div>
+      <button class="bell">🔔</button>
     </header>
 
     <main>
       <section id="beranda" class="page active">
         <div class="search-wrap">
-          <input id="searchInput" type="search" placeholder="Cari Hot Wheels, display, dll..." />
-          <span>🔍</span>
+          <input id="searchInput" placeholder="Cari Hot Wheels rare, display, blister..." />
+          <button onclick="searchProducts()">🔍</button>
         </div>
 
-        <section class="hero-card">
+        <section class="garage-hero">
           <div>
-            <p class="eyebrow">HOT WHEELS MARKETPLACE</p>
-            <h1>Jual • Beli • Tukar<br/>Koleksi Terbaikmu</h1>
-            <button onclick="scrollToProducts()">Jelajahi Sekarang</button>
+            <p class="eyebrow">GARAGE KOLEKTOR INDONESIA</p>
+            <h1>Jual • Beli • Tukar Koleksi Rare</h1>
+            <p>Hot Wheels, premium, TH, STH, display case, dan blister protector.</p>
+            <button onclick="showPage('produk')">Jelajahi Koleksi</button>
           </div>
-          <div class="hero-car">🏎️</div>
+          <div class="rare-showcase">
+            <div class="car-card red">STH</div>
+            <div class="car-card blue">R34</div>
+            <div class="car-card gold">TH</div>
+          </div>
         </section>
 
-        <div class="section-title">
-          <h2>Kategori</h2>
-          <button onclick="showPage('kategori')">Lihat Semua ›</button>
-        </div>
-        <div class="category-grid compact" id="homeCategories"></div>
+        <section class="stats-grid">
+          <div><b>120+</b><span>Produk Aktif</span></div>
+          <div><b>85</b><span>Transaksi</span></div>
+          <div><b>4.9</b><span>Rating Toko</span></div>
+        </section>
 
-        <div class="section-title" id="produk">
-          <h2>Produk Terbaru</h2>
-          <button onclick="showPage('kategori')">Lihat Semua ›</button>
+        <div class="section-head"><h2>Kategori</h2><a onclick="showPage('kategori')">Lihat Semua ›</a></div>
+        <div class="category-row">
+          <button onclick="filterProducts('Loose')">🚗<span>Loose</span></button>
+          <button onclick="filterProducts('Blister')">📦<span>Blister</span></button>
+          <button onclick="filterProducts('Premium')">⭐<span>Premium</span></button>
+          <button onclick="filterProducts('TH')">🏆<span>TH</span></button>
+          <button onclick="filterProducts('STH')">💎<span>STH</span></button>
+          <button onclick="filterProducts('Display')">🗄️<span>Display</span></button>
         </div>
-        <div class="product-grid" id="productGrid"></div>
+
+        <div class="section-head"><h2>Produk Terbaru</h2><a onclick="showPage('produk')">Lihat Semua ›</a></div>
+        <div id="productGrid" class="product-grid"></div>
+
+        <section class="panel review-panel">
+          <div class="section-head"><h2>Review & Bukti Transaksi</h2><a onclick="showPage('review')">Lihat Semua ›</a></div>
+          <div class="review-list compact">
+            <article><b>Raka - Jakarta</b><p>Barang aman, blister rapi, packing tebal.</p><span>✅ Transaksi AMI-24001</span></article>
+            <article><b>Dina - Bandung</b><p>Display case sesuai foto, sampai cepat.</p><span>✅ Transaksi AMI-24002</span></article>
+          </div>
+        </section>
       </section>
 
-      <section id="detail" class="page">
-        <button class="back-btn" onclick="showPage('beranda')">‹ Kembali</button>
-        <div id="detailContent"></div>
-      </section>
-
-      <section id="jual" class="page">
-        <h2 class="page-title">Jual Produk</h2>
-        <form class="sell-form" onsubmit="sendListing(event)">
-          <label>Foto Produk</label>
-          <div class="upload-box">📷<br/>Tambah Foto</div>
-          <label>Nama Produk</label>
-          <input id="sellName" required placeholder="Contoh: Nissan Skyline GT-R R34" />
-          <label>Harga</label>
-          <input id="sellPrice" required type="number" placeholder="Contoh: 75000" />
-          <label>Kategori</label>
-          <select id="sellCategory" required>
-            <option value="">Pilih Kategori</option>
-            <option>Loose</option><option>Blister</option><option>Display</option><option>Protector</option><option>Premium</option><option>TH</option><option>STH</option><option>Aksesoris</option>
-          </select>
-          <label>Kondisi</label>
-          <select id="sellCondition" required>
-            <option value="">Pilih Kondisi</option>
-            <option>Mint</option><option>Near Mint</option><option>Good</option><option>Loose</option><option>Blister Rusak</option><option>Baru</option>
-          </select>
-          <label>Lokasi</label>
-          <input id="sellLocation" placeholder="Contoh: Jakarta Timur" />
-          <label>Deskripsi</label>
-          <textarea id="sellDesc" placeholder="Tulis deskripsi produk..."></textarea>
-          <label>Nomor WhatsApp</label>
-          <input id="sellWa" placeholder="Contoh: 62812xxxxxxx" />
-          <button class="primary-btn" type="submit">Posting Produk</button>
-        </form>
+      <section id="produk" class="page">
+        <h2>Semua Produk</h2>
+        <div class="chips">
+          <button onclick="filterProducts('Semua')">Semua</button>
+          <button onclick="filterProducts('Loose')">Loose</button>
+          <button onclick="filterProducts('Blister')">Blister</button>
+          <button onclick="filterProducts('Premium')">Premium</button>
+          <button onclick="filterProducts('STH')">STH</button>
+          <button onclick="filterProducts('Display')">Display</button>
+        </div>
+        <div id="allProductGrid" class="product-grid"></div>
       </section>
 
       <section id="kategori" class="page">
-        <h2 class="page-title">Kategori</h2>
-        <div class="category-list" id="categoryList"></div>
+        <h2>Kategori</h2>
+        <div class="category-list">
+          <button onclick="filterProducts('Loose')">🚗 Hot Wheels Loose <span>›</span></button>
+          <button onclick="filterProducts('Blister')">📦 Hot Wheels Carded / Blister <span>›</span></button>
+          <button onclick="filterProducts('Premium')">⭐ Premium <span>›</span></button>
+          <button onclick="filterProducts('TH')">🏆 Treasure Hunt <span>›</span></button>
+          <button onclick="filterProducts('STH')">💎 Super Treasure Hunt <span>›</span></button>
+          <button onclick="filterProducts('Display')">🗄️ Display Case <span>›</span></button>
+          <button onclick="filterProducts('Protector')">🛡️ Blister Protector <span>›</span></button>
+        </div>
+      </section>
+
+      <section id="jual" class="page">
+        <h2>Jual Produk</h2>
+        <form id="sellForm" class="form-card">
+          <label>Nama Produk<input id="sellName" required placeholder="Contoh: Nissan Skyline GT-R R34"></label>
+          <label>Harga<input id="sellPrice" required placeholder="Contoh: 75000"></label>
+          <label>Kategori<select id="sellCategory"><option>Blister</option><option>Loose</option><option>Premium</option><option>Display</option><option>Protector</option></select></label>
+          <label>Kondisi<select id="sellCondition"><option>Mint</option><option>Good</option><option>Loose</option><option>Blister Rusak</option></select></label>
+          <label>Lokasi<input id="sellLocation" placeholder="Contoh: Jakarta Timur"></label>
+          <label>Nomor WhatsApp<input id="sellWa" placeholder="62812xxxxxxxx"></label>
+          <label>Deskripsi<textarea id="sellDesc" placeholder="Tuliskan detail produk"></textarea></label>
+          <button type="submit">Kirim ke WhatsApp Admin</button>
+        </form>
       </section>
 
       <section id="favorit" class="page">
-        <h2 class="page-title">Favorit</h2>
-        <div class="product-grid" id="favoriteGrid"></div>
+        <h2>Favorit</h2>
+        <div id="favoriteGrid" class="product-grid"></div>
+      </section>
+
+      <section id="review" class="page">
+        <h2>Review & Bukti Transaksi</h2>
+        <div class="review-list">
+          <article><b>Raka - Jakarta</b><p>Skyline R34 sampai aman. Packing bubble wrap tebal.</p><span>✅ AMI-24001 • Selesai</span></article>
+          <article><b>Dina - Bandung</b><p>Display acrylic mulus, tidak retak, seller responsif.</p><span>✅ AMI-24002 • Selesai</span></article>
+          <article><b>Bayu - Surabaya</b><p>Blister protector cocok untuk carded koleksi saya.</p><span>✅ AMI-24003 • Selesai</span></article>
+        </div>
+      </section>
+
+      <section id="cek" class="page">
+        <h2>Cek Transaksi</h2>
+        <div class="form-card">
+          <p>Masukkan kode transaksi untuk melihat status.</p>
+          <input id="trxCode" placeholder="Contoh: AMI-24001">
+          <button onclick="checkTransaction()">Cek Sekarang</button>
+          <div id="trxResult" class="result-box"></div>
+        </div>
+      </section>
+
+      <section id="login" class="page">
+        <h2>Login Pembeli / Penjual</h2>
+        <div class="form-card">
+          <p>Versi gratis ini memakai simulasi login di browser. Untuk login asli perlu backend seperti Firebase/Supabase.</p>
+          <input id="loginName" placeholder="Nama kamu">
+          <input id="loginPhone" placeholder="Nomor WhatsApp">
+          <button onclick="fakeLogin()">Masuk</button>
+        </div>
       </section>
 
       <section id="akun" class="page">
-        <h2 class="page-title">Akun</h2>
-        <div class="profile-card">
-          <div class="avatar">AW</div>
-          <div><h3>AmiWheels Garage</h3><p>⭐ 4.9 (120 Ulasan)</p></div>
-        </div>
-        <div class="stats"><div><b>120</b><span>Produk Dijual</span></div><div><b>85</b><span>Transaksi</span></div><div><b>98%</b><span>Rating Positif</span></div></div>
+        <h2>Akun</h2>
+        <div class="profile-card"><div class="avatar">AW</div><div><h3 id="profileName">AmiWheels Garage</h3><p>⭐ 4.9 (120 Ulasan)</p></div></div>
+        <div class="stats-grid"><div><b>120</b><span>Produk Dijual</span></div><div><b>85</b><span>Transaksi</span></div><div><b>98%</b><span>Rating Positif</span></div></div>
         <div class="menu-list">
-          <button>🛍️ Produk Saya ›</button><button>📦 Transaksi ›</button><button>📋 Pesanan ›</button><button>♡ Favorit ›</button><button>⚙️ Pengaturan Akun ›</button><button>❔ Bantuan & Panduan ›</button><button>ℹ️ Tentang AmiWheels ›</button><button class="logout">↪ Keluar</button>
+          <button onclick="showPage('produk')">🛍️ Produk Saya ›</button>
+          <button onclick="showPage('cek')">🔎 Cek Transaksi ›</button>
+          <button onclick="showPage('review')">🧾 Review / Bukti Transaksi ›</button>
+          <button onclick="showMyData()">📊 Data Login & Transaksi ›</button>
+          <button onclick="copyBuyerLink()">🔗 Link untuk Calon Pembeli ›</button>
+          <button onclick="showPage('favorit')">♡ Favorit ›</button>
+          <button onclick="helpWa()">❔ Bantuan WhatsApp ›</button>
+          <button class="danger" onclick="logoutDemo()">↪ Keluar</button>
         </div>
+        <div id="accountResult" class="result-box"></div>
       </section>
     </main>
 
     <nav class="bottom-nav">
-      <button class="nav-item active" onclick="showPage('beranda', this)">⌂<span>Beranda</span></button>
-      <button class="nav-item" onclick="showPage('kategori', this)">▦<span>Kategori</span></button>
-      <button class="nav-add" onclick="showPage('jual')">＋<span>Jual</span></button>
-      <button class="nav-item" onclick="showPage('favorit', this)">♡<span>Favorit</span></button>
-      <button class="nav-item" onclick="showPage('akun', this)">♙<span>Akun</span></button>
+      <button onclick="showPage('beranda')">⌂<span>Beranda</span></button>
+      <button onclick="showPage('kategori')">▦<span>Kategori</span></button>
+      <button class="sell" onclick="showPage('jual')">＋<span>Jual</span></button>
+      <button onclick="showPage('review')">🧾<span>Review</span></button>
+      <button onclick="showPage('akun')">♟<span>Akun</span></button>
     </nav>
   </div>
   <script src="app.js"></script>

@@ -1,98 +1,87 @@
-const adminWa = "6281234567890"; // ganti dengan nomor WhatsApp kamu
-
-const categories = [
-  {name:"Loose", icon:"🚗", desc:"Lihat semua produk loose"},
-  {name:"Blister", icon:"📦", desc:"Hot Wheels carded / blister"},
-  {name:"Premium", icon:"⭐", desc:"Hot Wheels Premium & Car Culture"},
-  {name:"TH", icon:"🏆", desc:"Semua seri Treasure Hunt"},
-  {name:"STH", icon:"💎", desc:"Semua seri Super Treasure Hunt"},
-  {name:"Display", icon:"🗄️", desc:"Rak / display untuk koleksi"},
-  {name:"Protector", icon:"🛡️", desc:"Protector untuk carded"},
-  {name:"Aksesoris", icon:"🔧", desc:"Diorama, ban, decal, dll"}
-];
-
+const ADMIN_WA = "6281234567890";
 const products = [
-  {id:1,name:"Nissan Skyline GT-R R34", price:75000, category:"Blister", condition:"Blister Mint", series:"Factory Fresh 2023", location:"Jakarta Timur", seller:"AmiWheels Garage", rating:"4.9 (120)", desc:"Kondisi card blister bagus, blister bening, tidak pecah. Minat? Chat langsung via WhatsApp.", icon:"Nissan Skyline GT-R R34"},
-  {id:2,name:"Toyota Supra MK4", price:60000, category:"Loose", condition:"Good", series:"JDM Collection", location:"Bandung", seller:"AmiWheels Garage", rating:"4.9 (120)", desc:"Loose kondisi good, cocok untuk koleksi atau display.", icon:"Toyota Supra MK4"},
-  {id:3,name:"Display Acrylic 1:64", price:120000, category:"Display", condition:"Baru", series:"6 Slot", location:"Surabaya", seller:"AmiWheels Garage", rating:"4.9 (120)", desc:"Display acrylic untuk mobil skala 1:64, tampilan rapi dan premium.", icon:"Display Acrylic 1:64"},
-  {id:4,name:"Blister Protector 10pcs", price:25000, category:"Protector", condition:"Baru", series:"Carded Protector", location:"Jakarta", seller:"AmiWheels Garage", rating:"4.9 (120)", desc:"Protector bening untuk menjaga card Hot Wheels tetap aman.", icon:"Blister Protector 10pcs"},
-  {id:5,name:"Porsche 911 GT3 RS", price:150000, category:"Premium", condition:"Mint", series:"Premium", location:"Depok", seller:"AmiWheels Garage", rating:"4.9 (120)", desc:"Premium mint, cocok untuk kolektor Porsche dan JDM garage display.", icon:"Porsche 911 GT3 RS"},
-  {id:6,name:"Honda Civic EG", price:60000, category:"Loose", condition:"Good", series:"Custom Look", location:"Bogor", seller:"AmiWheels Garage", rating:"4.9 (120)", desc:"Loose good condition, warna menarik untuk koleksi harian.", icon:"Honda Civic EG"}
+  {id:1,name:"Nissan Skyline GT-R R34",price:75000,cat:"Blister",condition:"Blister Mint",loc:"Jakarta Timur",rare:"R34"},
+  {id:2,name:"Toyota Supra MK4",price:60000,cat:"Loose",condition:"Good",loc:"Bandung",rare:"JDM"},
+  {id:3,name:"Display Acrylic 1:64",price:120000,cat:"Display",condition:"Baru",loc:"Surabaya",rare:"CASE"},
+  {id:4,name:"Blister Protector 10pcs",price:25000,cat:"Protector",condition:"Baru",loc:"Jakarta",rare:"PACK"},
+  {id:5,name:"Porsche 911 GT3 RS",price:150000,cat:"Premium",condition:"Mint",loc:"Depok",rare:"PREM"},
+  {id:6,name:"Honda Civic EG",price:60000,cat:"Loose",condition:"Good",loc:"Bogor",rare:"EG"},
+  {id:7,name:"Super Treasure Hunt Rare",price:450000,cat:"STH",condition:"Mint",loc:"Bekasi",rare:"STH"},
+  {id:8,name:"Treasure Hunt Gold",price:180000,cat:"TH",condition:"Mint",loc:"Tangerang",rare:"TH"}
 ];
-let favorites = new Set([1,2,3]);
-
-function rupiah(n){return "Rp " + n.toLocaleString("id-ID")}
-function waLink(text){return `https://wa.me/${adminWa}?text=${encodeURIComponent(text)}`}
-function renderCategories(){
-  const home = document.getElementById("homeCategories");
-  const list = document.getElementById("categoryList");
-  home.innerHTML = categories.map(c=>`<button class="cat-card" onclick="filterCategory('${c.name}')"><span class="ico">${c.icon}</span>${c.name}</button>`).join("");
-  list.innerHTML = categories.map(c=>`<button class="cat-row" onclick="filterCategory('${c.name}')"><span class="ico">${c.icon}</span><div><h3>Hot Wheels ${c.name}</h3><p>${c.desc}</p></div><b>›</b></button>`).join("");
+const transactions = {
+  "AMI-24001": {buyer:"Raka", item:"Nissan Skyline GT-R R34", status:"Selesai", proof:"Packing aman, barang diterima"},
+  "AMI-24002": {buyer:"Dina", item:"Display Acrylic 1:64", status:"Selesai", proof:"Pembayaran dan pengiriman selesai"},
+  "AMI-24003": {buyer:"Bayu", item:"Blister Protector 10pcs", status:"Dikirim", proof:"Resi sudah diberikan admin"}
+};
+let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+function rupiah(n){return new Intl.NumberFormat("id-ID").format(n)}
+function card(p){
+  const liked = favorites.includes(p.id);
+  return `<article class="product-card"><button class="fav" onclick="toggleFav(${p.id})">${liked?'♥':'♡'}</button><div class="product-img">${p.name}<br><small>${p.rare}</small></div><div class="product-body"><span class="badge">Tersedia</span><h3>${p.name}</h3><div class="price">Rp ${rupiah(p.price)}</div><div class="meta">${p.cat} • ${p.condition}<br>${p.loc}</div><button class="wa-btn" onclick="chatProduct('${p.name}',${p.price})">Chat Penjual</button></div></article>`;
 }
-function productCard(p){
-  return `<article class="product-card"><div class="product-photo" onclick="openDetail(${p.id})"><button class="heart ${favorites.has(p.id)?'saved':''}" onclick="event.stopPropagation();toggleFav(${p.id})">♥</button>${p.icon}</div><div class="product-info"><span class="badge">Tersedia</span><h3>${p.name}</h3><p class="price">${rupiah(p.price)}</p><p class="meta">${p.category} • ${p.condition}<br>${p.location}</p><button class="chat-btn" onclick="location.href='${waLink('Halo AmiWheels, saya tertarik dengan '+p.name)}'">Chat Penjual</button></div></article>`
+function render(list=products){
+  const home = document.getElementById("productGrid");
+  const all = document.getElementById("allProductGrid");
+  if(home) home.innerHTML = list.slice(0,6).map(card).join("");
+  if(all) all.innerHTML = list.map(card).join("");
+  renderFav();
 }
-function renderProducts(items=products){document.getElementById("productGrid").innerHTML = items.map(productCard).join("")}
-function renderFavorites(){const items=products.filter(p=>favorites.has(p.id));document.getElementById("favoriteGrid").innerHTML = items.length?items.map(productCard).join(""):'<p style="margin:0 18px;color:#777">Belum ada produk favorit.</p>'}
-function toggleFav(id){favorites.has(id)?favorites.delete(id):favorites.add(id);renderProducts();renderFavorites()}
-function filterCategory(cat){showPage('beranda');renderProducts(products.filter(p=>p.category===cat))}
-function openDetail(id){const p=products.find(x=>x.id===id);document.getElementById("detailContent").innerHTML=`<div class="detail-photo">${p.icon}</div><div class="detail-box"><div class="detail-title"><h2>${p.name}</h2><span class="badge">Tersedia</span></div><p class="detail-price">${rupiah(p.price)}</p><div class="detail-row"><b>Kondisi</b><span>${p.condition}</span></div><div class="detail-row"><b>Seri</b><span>${p.series}</span></div><div class="detail-row"><b>Lokasi</b><span>${p.location}</span></div><div class="seller"><div class="seller-logo">AW</div><div><b>${p.seller}</b><br><span>⭐ ${p.rating}</span></div></div><h3>Deskripsi</h3><p class="meta">${p.desc}</p><button class="wa-wide" onclick="location.href='${waLink('Halo AmiWheels, saya tertarik dengan '+p.name)}'">💬 Chat Penjual</button></div>`;showPage('detail')}
-function showPage(id, btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));if(btn)btn.classList.add('active');if(id==='favorit')renderFavorites();window.scrollTo({top:0,behavior:'smooth'})}
-function scrollToProducts(){document.getElementById('produk').scrollIntoView({behavior:'smooth'});}
-function sendListing(e){e.preventDefault();const text=`Halo Admin AmiWheels, saya mau jual produk:%0A%0ANama: ${sellName.value}%0AHarga: ${sellPrice.value}%0AKategori: ${sellCategory.value}%0AKondisi: ${sellCondition.value}%0ALokasi: ${sellLocation.value}%0ADeskripsi: ${sellDesc.value}%0AWA Penjual: ${sellWa.value}`;location.href=`https://wa.me/${adminWa}?text=${text}`}
-document.getElementById('searchInput').addEventListener('input',e=>{const q=e.target.value.toLowerCase();renderProducts(products.filter(p=>`${p.name} ${p.category} ${p.condition} ${p.location}`.toLowerCase().includes(q)))});
-renderCategories();renderProducts();renderFavorites();
-document.querySelectorAll(".menu-item").forEach((item) => {
-  item.addEventListener("click", () => {
-    const text = item.innerText.toLowerCase();
-
-    if (text.includes("produk saya")) {
-      document.querySelector("#jual")?.scrollIntoView({ behavior: "smooth" });
-    } else if (text.includes("favorit")) {
-      document.querySelector("#favorit")?.scrollIntoView({ behavior: "smooth" });
-    } else if (text.includes("bantuan")) {
-      window.open("https://wa.me/6289528201187?text=Halo%20AmiWheels,%20saya%20butuh%20bantuan", "_blank");
-    } else if (text.includes("tentang")) {
-      alert("AmiWheels adalah marketplace ringan untuk jual beli Hot Wheels, display, dan blister protector.");
-    } else if (text.includes("keluar")) {
-      alert("Fitur login belum tersedia di versi ringan.");
-    } else {
-      alert("Fitur ini segera hadir di AmiWheels.");
-    }
-  });
+function renderFav(){
+  const el = document.getElementById("favoriteGrid");
+  if(!el) return;
+  const list = products.filter(p=>favorites.includes(p.id));
+  el.innerHTML = list.length ? list.map(card).join("") : "<p>Belum ada produk favorit.</p>";
+}
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id)?.classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function filterProducts(cat){
+  const list = cat==="Semua" ? products : products.filter(p=>p.cat===cat);
+  render(list); showPage("produk");
+}
+function searchProducts(){
+  const q = document.getElementById("searchInput").value.toLowerCase();
+  render(products.filter(p=>p.name.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q))); showPage("produk");
+}
+function toggleFav(id){
+  favorites = favorites.includes(id) ? favorites.filter(x=>x!==id) : [...favorites,id];
+  localStorage.setItem("favorites",JSON.stringify(favorites)); render();
+}
+function chatProduct(name,price){
+  window.open(`https://wa.me/${ADMIN_WA}?text=Halo%20AmiWheels,%20saya%20tertarik%20dengan%20${encodeURIComponent(name)}%20Rp%20${rupiah(price)}`,'_blank');
+}
+document.getElementById("sellForm")?.addEventListener("submit",e=>{
+  e.preventDefault();
+  const msg = `Halo AmiWheels, saya ingin jual produk:%0AProduk: ${sellName.value}%0AHarga: ${sellPrice.value}%0AKategori: ${sellCategory.value}%0AKondisi: ${sellCondition.value}%0ALokasi: ${sellLocation.value}%0AWA: ${sellWa.value}%0ADeskripsi: ${sellDesc.value}`;
+  window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`,'_blank');
 });
-document.addEventListener("click", function (e) {
-  const text = e.target.innerText?.toLowerCase() || "";
-
-  if (text.includes("produk saya")) {
-    alert("Produk Saya akan tersedia di versi berikutnya.");
-  }
-
-  if (text.includes("transaksi")) {
-    alert("Fitur Transaksi segera hadir.");
-  }
-
-  if (text.includes("pesanan")) {
-    alert("Fitur Pesanan segera hadir.");
-  }
-
-  if (text.includes("favorit")) {
-    showPage("favorit");
-  }
-
-  if (text.includes("pengaturan akun")) {
-    alert("Pengaturan Akun segera hadir.");
-  }
-
-  if (text.includes("bantuan")) {
-    window.open("https://wa.me/6289528201187?text=Halo%20AmiWheels,%20saya%20butuh%20bantuan", "_blank");
-  }
-
-  if (text.includes("tentang amiwheels")) {
-    alert("AmiWheels adalah marketplace ringan untuk jual beli Hot Wheels, display, dan blister protector.");
-  }
-
-  if (text.includes("keluar")) {
-    alert("Fitur login belum tersedia di versi ringan.");
-  }
-});
+function checkTransaction(){
+  const code = document.getElementById("trxCode").value.trim().toUpperCase();
+  const box = document.getElementById("trxResult");
+  const t = transactions[code];
+  box.style.display="block";
+  box.innerHTML = t ? `<b>${code}</b><br>Pembeli: ${t.buyer}<br>Produk: ${t.item}<br>Status: <b>${t.status}</b><br>Bukti: ${t.proof}` : "Kode transaksi tidak ditemukan. Hubungi admin AmiWheels.";
+}
+function fakeLogin(){
+  const name = document.getElementById("loginName").value || "Pengguna AmiWheels";
+  localStorage.setItem("amiUser", JSON.stringify({name, phone:document.getElementById("loginPhone").value}));
+  document.getElementById("profileName").innerText = name;
+  showPage("akun");
+}
+function showMyData(){
+  const user = JSON.parse(localStorage.getItem("amiUser") || "{}");
+  const box = document.getElementById("accountResult");
+  box.style.display="block";
+  box.innerHTML = `<b>Data Login Demo</b><br>Nama: ${user.name || 'Belum login'}<br>WA: ${user.phone || '-'}<br><br><b>Riwayat Transaksi</b><br>AMI-24001 • Selesai<br>AMI-24002 • Selesai<br>AMI-24003 • Dikirim`;
+}
+function copyBuyerLink(){
+  navigator.clipboard?.writeText(location.href);
+  const box = document.getElementById("accountResult");
+  box.style.display="block"; box.innerHTML="Link toko untuk calon pembeli sudah disalin. Bagikan link website ini ke WhatsApp/Instagram.";
+}
+function helpWa(){window.open(`https://wa.me/${ADMIN_WA}?text=Halo%20AmiWheels,%20saya%20butuh%20bantuan`,'_blank')}
+function logoutDemo(){localStorage.removeItem("amiUser");alert("Keluar dari login demo.")}
+render();
