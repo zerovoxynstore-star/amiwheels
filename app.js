@@ -1,5 +1,5 @@
-const STORAGE_KEY = "amiwheels_products_v1";
-const SALES_KEY = "amiwheels_sales_history_v1";
+const STORAGE_KEY = "amiwheels_products_v2";
+const SALES_KEY = "amiwheels_sales_history_v2";
 let currentCategory = "all";
 
 const sampleProducts = [
@@ -32,21 +32,6 @@ const sampleProducts = [
     description: "Ready stock, bisa COD.",
     status: "active",
     createdAt: new Date().toISOString()
-  },
-  {
-    id: crypto.randomUUID(),
-    name: "Display Acrylic 12 Slot",
-    brand: "AmiWheels",
-    category: "Display & Blister",
-    condition: "New",
-    price: 120000,
-    stock: 0,
-    sold: 10,
-    whatsapp: "6281234567890",
-    image: "https://images.unsplash.com/photo-1605515298946-d66455f10c87?q=80&w=800&auto=format&fit=crop",
-    description: "Display akrilik untuk koleksi die-cast.",
-    status: "soldout",
-    createdAt: new Date().toISOString()
   }
 ];
 
@@ -63,13 +48,21 @@ function saveProducts(products) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
 }
 
+function getSalesHistory() {
+  const saved = localStorage.getItem(SALES_KEY);
+  return saved ? JSON.parse(saved) : [];
+}
+
+function saveSalesHistory(history) {
+  localStorage.setItem(SALES_KEY, JSON.stringify(history));
+}
+
 function formatRupiah(value) {
-  return "Rp" + Number(value || 0).toLocaleString("id-ID");
+  return "Rp " + Number(value || 0).toLocaleString("id-ID");
 }
 
 function productStatus(product) {
-  if (Number(product.stock) <= 0) return "soldout";
-  return "active";
+  return Number(product.stock) <= 0 ? "soldout" : "active";
 }
 
 function getBadge(product) {
@@ -85,7 +78,7 @@ function getBadge(product) {
 function productCard(product) {
   const soldout = product.status === "soldout" || Number(product.stock) <= 0;
   const waText = encodeURIComponent(`Halo, saya tertarik dengan ${product.name} di AmiWheels`);
-  const image = product.image || "https://placehold.co/400x300?text=AmiWheels";
+  const image = product.image || "https://placehold.co/400x300/111827/ffffff?text=AmiWheels";
 
   return `
     <article class="product-card ${soldout ? "soldout" : ""}">
@@ -124,13 +117,8 @@ function renderProducts() {
   saveProducts(products);
 
   const filtered = filterProducts(products);
-  const active = filtered
-    .filter(p => p.status === "active")
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-  const soldout = filtered
-    .filter(p => p.status === "soldout")
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const active = filtered.filter(p => p.status === "active").sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const soldout = filtered.filter(p => p.status === "soldout").sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   const activeEl = document.getElementById("activeProducts");
   const soldEl = document.getElementById("soldoutProducts");
@@ -145,7 +133,7 @@ function renderProducts() {
 }
 
 function inventoryCard(product) {
-  const image = product.image || "https://placehold.co/300x300?text=AmiWheels";
+  const image = product.image || "https://placehold.co/300x300/111827/ffffff?text=AmiWheels";
   const soldout = product.status === "soldout" || Number(product.stock) <= 0;
 
   return `
@@ -177,13 +165,22 @@ function renderInventory() {
   if (invActive) invActive.innerHTML = active.map(inventoryCard).join("") || "<p>Tidak ada produk aktif.</p>";
   if (invSold) invSold.innerHTML = soldout.map(inventoryCard).join("") || "<p>Tidak ada produk sold out.</p>";
 
-  const statActive = document.getElementById("statActive");
-  const statSoldout = document.getElementById("statSoldout");
-  const statSold = document.getElementById("statSold");
+  const totalSold = products.reduce((sum, p) => sum + Number(p.sold || 0), 0);
 
-  if (statActive) statActive.textContent = active.length;
-  if (statSoldout) statSoldout.textContent = soldout.length;
-  if (statSold) statSold.textContent = products.reduce((sum, p) => sum + Number(p.sold || 0), 0);
+  for (const id of ["statActive", "homeActive"]) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = active.length;
+  }
+
+  for (const id of ["statSoldout", "homeSoldout"]) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = soldout.length;
+  }
+
+  for (const id of ["statSold", "homeSold"]) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = totalSold;
+  }
 }
 
 function showPage(pageId) {
@@ -201,7 +198,6 @@ function showPage(pageId) {
 function filterCategory(category) {
   currentCategory = category;
   showPage("marketplace");
-  renderProducts();
 }
 
 function resetFilter() {
@@ -211,27 +207,15 @@ function resetFilter() {
   renderProducts();
 }
 
-
-function getSalesHistory() {
-  const saved = localStorage.getItem(SALES_KEY);
-  return saved ? JSON.parse(saved) : [];
-}
-
-function saveSalesHistory(history) {
-  localStorage.setItem(SALES_KEY, JSON.stringify(history));
-}
-
 function createInvoiceNumber() {
-  const now = new Date();
-  const date = now.toISOString().slice(0, 10).replaceAll("-", "");
+  const date = new Date().toISOString().slice(0, 10).replaceAll("-", "");
   const random = Math.floor(1000 + Math.random() * 9000);
   return `AW-${date}-${random}`;
 }
 
 function addSalesRecord(product, qty = 1) {
   const history = getSalesHistory();
-
-  const record = {
+  history.unshift({
     id: crypto.randomUUID(),
     invoice: createInvoiceNumber(),
     productId: product.id,
@@ -242,13 +226,50 @@ function addSalesRecord(product, qty = 1) {
     qty,
     price: Number(product.price),
     total: Number(product.price) * qty,
-    buyer: "Pembeli via WhatsApp",
     status: "Selesai",
     date: new Date().toISOString()
-  };
-
-  history.unshift(record);
+  });
   saveSalesHistory(history);
+}
+
+function sellOne(id) {
+  const products = getProducts().map(product => {
+    if (product.id !== id) return product;
+
+    const newStock = Math.max(0, Number(product.stock) - 1);
+    const newSold = Number(product.sold || 0) + 1;
+
+    addSalesRecord(product, 1);
+
+    return {
+      ...product,
+      stock: newStock,
+      sold: newSold,
+      status: newStock <= 0 ? "soldout" : "active"
+    };
+  });
+
+  saveProducts(products);
+  renderProducts();
+}
+
+function restock(id) {
+  const amount = Number(prompt("Tambah stok berapa?", "10"));
+  if (!amount || amount < 1) return;
+
+  const products = getProducts().map(product => {
+    if (product.id !== id) return product;
+    return { ...product, stock: Number(product.stock || 0) + amount, status: "active" };
+  });
+
+  saveProducts(products);
+  renderProducts();
+}
+
+function deleteProduct(id) {
+  if (!confirm("Hapus produk ini?")) return;
+  saveProducts(getProducts().filter(product => product.id !== id));
+  renderProducts();
 }
 
 function renderSalesHistory() {
@@ -269,54 +290,28 @@ function renderSalesHistory() {
   if (!list) return;
 
   if (!history.length) {
-    list.innerHTML = `
-      <div class="empty-card">
-        <h3>Belum ada history penjualan</h3>
-        <p>Klik tombol “Terjual 1” di Inventory untuk membuat bukti transaksi otomatis.</p>
-      </div>
-    `;
+    list.innerHTML = `<div class="empty-card">Belum ada history penjualan.</div>`;
     return;
   }
 
   list.innerHTML = history.map(item => {
     const date = new Date(item.date).toLocaleString("id-ID", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
+      day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"
     });
 
     return `
       <article class="receipt-card">
         <div class="receipt-head">
-          <div>
-            <strong>${item.invoice}</strong>
-            <span>${date}</span>
-          </div>
+          <div><strong>${item.invoice}</strong><span>${date}</span></div>
           <b>${item.status}</b>
         </div>
-
         <div class="receipt-body">
           <h3>${item.productName}</h3>
           <p>${item.brand} • ${item.category} • ${item.condition}</p>
-
-          <div class="receipt-row">
-            <span>Qty</span>
-            <strong>${item.qty}</strong>
-          </div>
-
-          <div class="receipt-row">
-            <span>Harga</span>
-            <strong>${formatRupiah(item.price)}</strong>
-          </div>
-
-          <div class="receipt-row total">
-            <span>Total</span>
-            <strong>${formatRupiah(item.total)}</strong>
-          </div>
+          <div class="receipt-row"><span>Qty</span><strong>${item.qty}</strong></div>
+          <div class="receipt-row"><span>Harga</span><strong>${formatRupiah(item.price)}</strong></div>
+          <div class="receipt-row total"><span>Total</span><strong>${formatRupiah(item.total)}</strong></div>
         </div>
-
         <div class="receipt-foot">
           <span>AmiWheels Seller</span>
           <button onclick="copyReceipt('${item.id}')">Copy Bukti</button>
@@ -350,11 +345,7 @@ Terima kasih sudah berbelanja di AmiWheels.
 
 function exportSalesHistory() {
   const history = getSalesHistory();
-
-  if (!history.length) {
-    alert("Belum ada history penjualan.");
-    return;
-  }
+  if (!history.length) return alert("Belum ada history penjualan.");
 
   const rows = [
     ["Invoice", "Tanggal", "Produk", "Brand", "Kategori", "Kondisi", "Qty", "Harga", "Total", "Status"],
@@ -375,12 +366,10 @@ function exportSalesHistory() {
   const csv = rows.map(row => row.map(value => `"${String(value).replaceAll('"', '""')}"`).join(",")).join("\n");
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(blob);
-
   const link = document.createElement("a");
   link.href = url;
   link.download = "amiwheels-history-penjualan.csv";
   link.click();
-
   URL.revokeObjectURL(url);
 }
 
@@ -388,55 +377,6 @@ function clearSalesHistory() {
   if (!confirm("Hapus semua history penjualan?")) return;
   localStorage.removeItem(SALES_KEY);
   renderSalesHistory();
-}
-
-
-function sellOne(id) {
-  const products = getProducts().map(product => {
-    if (product.id !== id) return product;
-
-    const newStock = Math.max(0, Number(product.stock) - 1);
-    const newSold = Number(product.sold || 0) + 1;
-
-    addSalesRecord(product, 1);
-
-    return {
-      ...product,
-      stock: newStock,
-      sold: newSold,
-      status: newStock <= 0 ? "soldout" : "active"
-    };
-  });
-
-  saveProducts(products);
-  renderProducts();
-}
-
-function restock(id) {
-  const amount = Number(prompt("Tambah stok berapa?", "10"));
-  if (!amount || amount < 1) return;
-
-  const products = getProducts().map(product => {
-    if (product.id !== id) return product;
-
-    const newStock = Number(product.stock || 0) + amount;
-
-    return {
-      ...product,
-      stock: newStock,
-      status: "active"
-    };
-  });
-
-  saveProducts(products);
-  renderProducts();
-}
-
-function deleteProduct(id) {
-  if (!confirm("Hapus produk ini?")) return;
-  const products = getProducts().filter(product => product.id !== id);
-  saveProducts(products);
-  renderProducts();
 }
 
 function clearAllData() {
@@ -447,10 +387,36 @@ function clearAllData() {
   showPage("home");
 }
 
-document.getElementById("productForm").addEventListener("submit", function(event) {
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById("imageUpload").addEventListener("change", function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const preview = document.getElementById("preview");
+  const placeholder = document.getElementById("uploadPlaceholder");
+
+  preview.src = URL.createObjectURL(file);
+  preview.style.display = "block";
+  placeholder.style.display = "none";
+});
+
+document.getElementById("productForm").addEventListener("submit", async function(event) {
   event.preventDefault();
 
   const form = new FormData(event.target);
+  const file = document.getElementById("imageUpload").files[0];
+
+  let image = "";
+  if (file) image = await fileToBase64(file);
+
   const stock = Number(form.get("stock") || 0);
 
   const product = {
@@ -463,7 +429,7 @@ document.getElementById("productForm").addEventListener("submit", function(event
     stock,
     sold: 0,
     whatsapp: form.get("whatsapp"),
-    image: form.get("image") || "",
+    image,
     description: form.get("description") || "",
     status: stock <= 0 ? "soldout" : "active",
     createdAt: new Date().toISOString()
@@ -474,7 +440,10 @@ document.getElementById("productForm").addEventListener("submit", function(event
   saveProducts(products);
 
   event.target.reset();
-  alert("Koleksi berhasil ditambahkan ke marketplace!");
+  document.getElementById("preview").style.display = "none";
+  document.getElementById("uploadPlaceholder").style.display = "block";
+
+  alert("Koleksi berhasil ditambahkan!");
   showPage("marketplace");
 });
 

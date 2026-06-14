@@ -13,17 +13,24 @@
         <h1>Ami<span>Wheels</span></h1>
         <p>Collect • Trade • Sell</p>
       </div>
-      <button class="icon-btn" onclick="showPage('account')">AW</button>
+      <button class="avatar-mini" onclick="showPage('account')">AW</button>
     </header>
 
     <main>
       <section id="home" class="page active">
         <div class="hero">
-          <div class="hero-overlay">
-            <h2>Tempat Kolektor Die-cast Berkumpul</h2>
-            <p>Upload koleksi, atur stok, dan jual ke kolektor lainnya.</p>
-            <button onclick="showPage('sell')">+ Tambah Koleksi</button>
+          <div>
+            <span class="pill">Seller Dashboard</span>
+            <h2>Koleksi Die-cast Kamu, Siap Dijual</h2>
+            <p>Upload foto dari galeri, atur stok, dan jual langsung via WhatsApp.</p>
+            <button class="primary" onclick="showPage('sell')">+ Tambah Koleksi</button>
           </div>
+        </div>
+
+        <div class="stats">
+          <div><strong id="homeActive">0</strong><span>Aktif</span></div>
+          <div><strong id="homeSoldout">0</strong><span>Sold Out</span></div>
+          <div><strong id="homeSold">0</strong><span>Terjual</span></div>
         </div>
 
         <h3>Kategori</h3>
@@ -66,10 +73,20 @@
 
       <section id="sell" class="page">
         <h2>Tambah Koleksi untuk Dijual</h2>
+        <p class="subtext">Foto bisa langsung dipilih dari galeri HP.</p>
 
         <form id="productForm">
-          <label>Link Foto Produk</label>
-          <input name="image" placeholder="https://..." />
+          <label>Foto Produk</label>
+
+          <div class="upload-box" onclick="document.getElementById('imageUpload').click()">
+            <input type="file" id="imageUpload" accept="image/*" hidden />
+            <img id="preview" />
+            <div id="uploadPlaceholder">
+              <div class="upload-icon">☁️</div>
+              <strong>Klik untuk upload foto</strong>
+              <span>JPG, PNG, WEBP</span>
+            </div>
+          </div>
 
           <label>Nama Produk</label>
           <input name="name" required placeholder="Contoh: Nissan Skyline GT-R R34" />
@@ -95,11 +112,16 @@
             <option>Used</option>
           </select>
 
-          <label>Harga</label>
-          <input name="price" type="number" required placeholder="150000" />
-
-          <label>Stok</label>
-          <input name="stock" type="number" required value="1" min="0" />
+          <div class="two-col">
+            <div>
+              <label>Harga</label>
+              <input name="price" type="number" required placeholder="150000" />
+            </div>
+            <div>
+              <label>Stok</label>
+              <input name="stock" type="number" required value="1" min="0" />
+            </div>
+          </div>
 
           <label>Nomor WhatsApp</label>
           <input name="whatsapp" required placeholder="6281234567890" />
@@ -127,10 +149,9 @@
         <div id="inventorySoldout" class="inventory-list"></div>
       </section>
 
-
       <section id="history" class="page">
-        <h2>Bukti Pembelian / History Penjualan</h2>
-        <p class="subtext">Riwayat ini otomatis tercatat saat produk ditandai terjual.</p>
+        <h2>Bukti Pembelian / History</h2>
+        <p class="subtext">Otomatis tercatat saat produk ditandai terjual.</p>
 
         <div class="stats">
           <div><strong id="historyCount">0</strong><span>Transaksi</span></div>
@@ -148,18 +169,21 @@
 
       <section id="account" class="page">
         <h2>Akun Saya</h2>
+
         <div class="profile-card">
+          <div class="profile-glow"></div>
           <div class="avatar">AW</div>
           <h3>AmiWheels Seller</h3>
           <p>Kolektor & Penjual Die-cast</p>
+          <span class="verified">✓ Verified Seller</span>
         </div>
 
         <div class="menu-list">
-          <button onclick="showPage('inventory')">📦 Inventory Saya</button>
-          <button onclick="showPage('sell')">➕ Tambah Koleksi</button>
-          <button onclick="showPage('marketplace')">🛒 Marketplace</button>
-          <button onclick="showPage('history')">🧾 Bukti Pembelian / History</button>
-          <button onclick="clearAllData()">🗑 Reset Data Demo</button>
+          <button onclick="showPage('inventory')">📦 <span>Inventory Saya</span><small>Kelola stok koleksi</small></button>
+          <button onclick="showPage('sell')">➕ <span>Tambah Koleksi</span><small>Upload koleksi baru</small></button>
+          <button onclick="showPage('marketplace')">🛒 <span>Marketplace</span><small>Lihat semua produk</small></button>
+          <button onclick="showPage('history')">🧾 <span>Bukti / History</span><small>Riwayat penjualan</small></button>
+          <button onclick="clearAllData()">🗑 <span>Reset Data Demo</span><small>Hapus data lokal</small></button>
         </div>
       </section>
     </main>
