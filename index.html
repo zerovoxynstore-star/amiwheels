@@ -68,23 +68,8 @@
         <h2>Tambah Koleksi untuk Dijual</h2>
 
         <form id="productForm">
-          <label>Foto Produk</label>
-
-<input
-  type="file"
-  id="imageUpload"
-  accept="image/*"
-/>
-
-<img
-  id="preview"
-  style="
-    width:100%;
-    border-radius:12px;
-    margin-top:10px;
-    display:none;
-  "
-/>
+          <label>Link Foto Produk</label>
+          <input name="image" placeholder="https://..." />
 
           <label>Nama Produk</label>
           <input name="name" required placeholder="Contoh: Nissan Skyline GT-R R34" />
@@ -142,6 +127,25 @@
         <div id="inventorySoldout" class="inventory-list"></div>
       </section>
 
+
+      <section id="history" class="page">
+        <h2>Bukti Pembelian / History Penjualan</h2>
+        <p class="subtext">Riwayat ini otomatis tercatat saat produk ditandai terjual.</p>
+
+        <div class="stats">
+          <div><strong id="historyCount">0</strong><span>Transaksi</span></div>
+          <div><strong id="historyRevenue">Rp0</strong><span>Omzet</span></div>
+          <div><strong id="historyItems">0</strong><span>Item</span></div>
+        </div>
+
+        <div class="history-actions">
+          <button onclick="exportSalesHistory()">Export Bukti</button>
+          <button onclick="clearSalesHistory()">Hapus History</button>
+        </div>
+
+        <div id="salesHistory" class="history-list"></div>
+      </section>
+
       <section id="account" class="page">
         <h2>Akun Saya</h2>
         <div class="profile-card">
@@ -154,6 +158,7 @@
           <button onclick="showPage('inventory')">📦 Inventory Saya</button>
           <button onclick="showPage('sell')">➕ Tambah Koleksi</button>
           <button onclick="showPage('marketplace')">🛒 Marketplace</button>
+          <button onclick="showPage('history')">🧾 Bukti Pembelian / History</button>
           <button onclick="clearAllData()">🗑 Reset Data Demo</button>
         </div>
       </section>

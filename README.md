@@ -26,3 +26,11 @@ Cukup buka `index.html` di browser.
 ## Catatan
 Ini versi tanpa database dulu. Cocok untuk validasi desain dan alur toko.
 Nanti bisa disambungkan ke Cloudflare D1.
+
+
+## Update Fitur History Penjualan
+- Setiap klik `Terjual 1`, sistem otomatis membuat bukti transaksi.
+- Ada menu `Bukti Pembelian / History` di halaman Akun.
+- History berisi nomor invoice, tanggal, produk, qty, harga, total, dan status.
+- Ada tombol `Copy Bukti` untuk menyalin bukti pembelian.
+- Ada tombol `Export Bukti` untuk download CSV.
