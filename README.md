@@ -1,20 +1,23 @@
-# AmiWheels Dark Upload
+# AmiWheels Customer + Admin
 
-Versi ini sudah:
-- Dark premium style
-- Upload foto dari galeri HP, bukan link
-- Preview foto produk
-- Marketplace
-- Inventory
-- Auto Sold Out
-- Restock
-- Bukti Pembelian / History Penjualan
-- Export CSV
+File:
+- index.html = link customer/pembeli
+- admin.html = link admin penjual
+- style.css = tampilan dark premium mirip mockup
+- shared.js = data produk, stok, history, pendapatan
 
-## Cara pasang
-Upload ulang 3 file utama ke GitHub:
-- index.html
-- style.css
-- app.js
+## Link setelah deploy
+Customer:
+https://NAMA-PROJECT.pages.dev/
 
-Setelah commit, buka Cloudflare Pages > Deployments > redeploy.
+Admin:
+https://NAMA-PROJECT.pages.dev/admin.html
+
+## Cara upload
+Upload semua file ini ke GitHub:
+index.html
+admin.html
+style.css
+shared.js
+
+Lalu redeploy di Cloudflare Pages.
